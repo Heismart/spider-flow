@@ -1,0 +1,92 @@
+server:
+  port: 8088
+logging:
+  level:
+    root: INFO
+    org:
+      spiderflow: DEBUG
+#selenium 插件配置
+selenium:
+  driver:
+    #设置chrome的WebDriver驱动路径，下载地址：http://npm.taobao.org/mirrors/chromedriver/，注意版本问题
+    chrome: E:/driver/chromedriver.exe
+    #设置fireFox的WebDriver驱动路径，下载地址：https://github.com/mozilla/geckodriver/releases
+    firefox: E:/driver/geckodriver.exe
+#配置mybatis-plus执行日志输出,以便分析SQL
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+spider:
+  #爬虫任务的工作空间
+  workspace: ./data/spider
+  thread:
+    #单任务默认最大线程数
+    default: 8
+    #平台最大线程数
+    max: 64
+  detect:
+    #死循环检测(节点执行次数超过该值时认为是死循环)默认值为5000
+    dead-cycle: 5000
+  bloomfilter:
+    #布隆过滤器默认容量
+    capacity: 1000000
+    #布隆过滤器默认容错率
+    error-rate: 0.0001
+  job:
+    #设置为true时定时任务才生效
+    enable: false
+  #爬虫通知相关内容配置,可使用SpiderFlow中的变量名和以下变量名:currentDate:当前发送时间
+  notice:
+    content:
+      end: 流程执行完毕：{name}，结束时间：{currentDate}
+      exception: 流程发生异常：{name}，异常时间：{currentDate}
+      start: 流程开始执行：{name}，开始时间：{currentDate}
+    subject: spider-flow流程通知
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration,org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+  datasource:
+    #url: jdbc:mysql://localhost:3306/spiderflow?useSSL=false&useUnicode=true&characterEncoding=UTF8&autoReconnect=true
+    #username: root
+    #password: 123456789
+    #driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:sqlite:./data/db/sqlite/spiderflow.db
+    username:
+    password:
+    driver-class-name: org.sqlite.JDBC
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 8
+      max-active: 20
+      min-idle: 1
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      validation-query: select '*'
+      filters: stat,slf4j,config
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      fail_on_empty_beans: false
+    time-zone: GMT+8
+  #JavaMailSender 邮件发送的配置
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    port: 465
+    protocol: smtp
+    username: xxxx@qq.com
+    password: xxx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+            port: 465
+          starttls:
+            enable: true
+            required: true
